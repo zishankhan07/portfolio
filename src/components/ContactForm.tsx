@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import emailjs from "@emailjs/browser";
 
 interface ContactFormProps {
   className?: string;
@@ -27,20 +28,37 @@ const ContactForm = ({ className = "" }: ContactFormProps) => {
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus("submitting");
 
-    // Simulate form submission
-    setTimeout(() => {
-      // In a real app, you would send the form data to a server here
-      console.log("Form submitted:", formState);
+    try {
+      const templateParams = {
+        from_name: formState.name,
+        from_email: formState.email,
+        message: formState.message,
+        to_name: "Zishan Ali Khan",
+      };
+
+      await emailjs.send(
+        "service_9xj8z7k",
+        "template_zbg4u31",
+        templateParams,
+        "INI6glljr5j8lR7TN",
+      );
+
       setFormStatus("success");
       setFormState({ name: "", email: "", message: "" });
 
       // Reset form status after showing success message
-      setTimeout(() => setFormStatus("idle"), 3000);
-    }, 1500);
+      setTimeout(() => setFormStatus("idle"), 5000);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setFormStatus("error");
+
+      // Reset form status after showing error message
+      setTimeout(() => setFormStatus("idle"), 5000);
+    }
   };
 
   return (
@@ -139,7 +157,7 @@ const ContactForm = ({ className = "" }: ContactFormProps) => {
               animate={{ opacity: 1, y: 0 }}
               className="text-green-400 text-center font-medium"
             >
-              Thank you for your message! I'll get back to you soon.
+              Thanks for reaching out! I'll get back to you soon.
             </motion.div>
           )}
 
@@ -149,7 +167,7 @@ const ContactForm = ({ className = "" }: ContactFormProps) => {
               animate={{ opacity: 1, y: 0 }}
               className="text-red-400 text-center font-medium"
             >
-              Something went wrong. Please try again later.
+              Failed to send message. Please try again or contact me directly.
             </motion.div>
           )}
         </form>

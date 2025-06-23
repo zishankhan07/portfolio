@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import HeroSection from "./HeroSection";
@@ -10,6 +10,57 @@ import { Card, CardContent } from "./ui/card";
 import { Separator } from "./ui/separator";
 
 const HomePage = () => {
+  // Typing animation for skills
+  const [skillText, setSkillText] = useState("");
+  const [skillIndex, setSkillIndex] = useState(0);
+  const [isSkillTyping, setIsSkillTyping] = useState(true);
+  const [showSkillCursor, setShowSkillCursor] = useState(true);
+
+  const skillStrings = [
+    "Frontend Development",
+    "UI/UX Design",
+    "Programming in C/C++, Python",
+    "Responsive Web Design",
+    "GitHub & Version Control",
+  ];
+
+  // Skills typing animation
+  useEffect(() => {
+    const currentSkill = skillStrings[skillIndex];
+
+    if (isSkillTyping) {
+      if (skillText.length < currentSkill.length) {
+        const timeout = setTimeout(() => {
+          setSkillText(currentSkill.slice(0, skillText.length + 1));
+        }, 100);
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          setIsSkillTyping(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+      }
+    } else {
+      if (skillText.length > 0) {
+        const timeout = setTimeout(() => {
+          setSkillText(skillText.slice(0, -1));
+        }, 50);
+        return () => clearTimeout(timeout);
+      } else {
+        setSkillIndex((prev) => (prev + 1) % skillStrings.length);
+        setIsSkillTyping(true);
+      }
+    }
+  }, [skillText, isSkillTyping, skillIndex, skillStrings]);
+
+  // Cursor blinking for skills
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowSkillCursor((prev) => !prev);
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+
   // Skills data
   const skills = {
     proficient: ["C", "C++", "Python", "SQL", "HTML", "CSS"],
@@ -34,7 +85,7 @@ const HomePage = () => {
       description:
         "Dynamic resume builder using HTML, CSS & JS with real-time creation, intuitive UI and PDF download functionality.",
       image: "https://imagizer.imageshack.com/img923/2401/Jq5DjI.png",
-      link: "#",
+      link: "https://resume-makers.netlify.app/",
     },
     {
       id: 2,
@@ -43,7 +94,7 @@ const HomePage = () => {
       description:
         "Interactive city discovery web app built using HTML, CSS, and JavaScript that lets users search cities and view key information.",
       image: "https://imagizer.imageshack.com/img923/2161/h0j1i6.jpg",
-      link: "#",
+      link: "https://nanded-explorer.netlify.app/",
     },
   ];
 
@@ -80,12 +131,25 @@ const HomePage = () => {
             <h2 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600">
               About Me
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl">
-              I'm known for being a reliable team player who also takes
-              initiative and delivers quality work. I seek opportunities to
-              apply my knowledge, grow professionally, and contribute to a
-              forward-thinking organization.
-            </p>
+            <div className="mb-6">
+              <p className="text-lg text-gray-300 max-w-3xl mb-4">
+                I'm known for being a reliable team player who also takes
+                initiative and delivers quality work. I seek opportunities to
+                apply my knowledge, grow professionally, and contribute to a
+                forward-thinking organization.
+              </p>
+              <div className="text-xl text-purple-300 font-medium">
+                <span>I specialize in </span>
+                <span className="text-purple-400">
+                  {skillText}
+                  <span
+                    className={`${showSkillCursor ? "opacity-100" : "opacity-0"} transition-opacity`}
+                  >
+                    |
+                  </span>
+                </span>
+              </div>
+            </div>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">

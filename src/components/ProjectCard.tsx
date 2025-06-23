@@ -57,6 +57,23 @@ const ProjectCard = ({
             {description}
           </CardDescription>
         </CardContent>
+
+        <CardFooter className="pt-0">
+          <Button
+            asChild
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-500/20 group transition-all duration-300"
+          >
+            <a
+              href={projectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center"
+            >
+              Try it Here
+              <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </Button>
+        </CardFooter>
       </Card>
     </motion.div>
   );

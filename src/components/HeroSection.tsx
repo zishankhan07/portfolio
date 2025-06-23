@@ -95,12 +95,59 @@ const HeroSection = () => {
       {/* Navigation */}
       <nav className="absolute top-0 left-0 right-0 flex justify-between items-center p-6 z-10">
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-2xl font-bold text-white"
+          className="flex items-center"
         >
-          ZK
+          <motion.svg
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            className="text-purple-400"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          >
+            <defs>
+              <linearGradient
+                id="logoGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" stopColor="#a855f7" />
+                <stop offset="100%" stopColor="#ec4899" />
+              </linearGradient>
+            </defs>
+            <circle
+              cx="20"
+              cy="20"
+              r="18"
+              fill="none"
+              stroke="url(#logoGradient)"
+              strokeWidth="2"
+            />
+            <circle
+              cx="20"
+              cy="20"
+              r="12"
+              fill="none"
+              stroke="url(#logoGradient)"
+              strokeWidth="1"
+              opacity="0.6"
+            />
+            <circle
+              cx="20"
+              cy="20"
+              r="6"
+              fill="url(#logoGradient)"
+              opacity="0.8"
+            />
+          </motion.svg>
+          <span className="ml-2 text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+            Portfolio
+          </span>
         </motion.div>
         <motion.div
           initial={{ opacity: 0 }}
